@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import { Router } from "express";
+import authRoutes from './auth.routes'
+
 const router = Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.use('/auth', authRoutes);
+
 
 export default router;

@@ -1,27 +1,29 @@
-import express, {  urlencoded } from "express";
+import express, { urlencoded } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { join } from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-
-import indexRouter from "./routes/index";
-import usersRouter from "./routes/users";
+import { db } from "./database/knexfile";
+import routes from "./routes/index";
+import { Config } from "./utils/config";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = Config.PORT;
+db.raw("SELECT 1")
+  .then(() => console.log("Database connected ✅"))
+  .catch((err) => console.error("Database connection failed ❌", err));
 
 app.use(cors());
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
+app.use(logger("dev"));
 
-app.get("/", (req, res) => {
-  res.send("Hello, Express with TypeScript!");
-});
-
+// Routes
+app.use("/v1", routes);
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
