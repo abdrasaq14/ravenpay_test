@@ -1,7 +1,7 @@
 import { knex, type Knex } from "knex";
 import path from "path";
 import { Config } from "../utils/config";
-
+console.log('config', Config)
 const config: { [key: string]: Knex.Config } = {
   development: {
     client: "mysql2",
@@ -19,37 +19,6 @@ const config: { [key: string]: Knex.Config } = {
     },
   },
 
-  staging: {
-    client: "mysql2", 
-    connection: {
-      host: "localhost",
-      user: "staging_user", 
-      password: "staging_password", 
-      database: "staging_db", 
-      port: 3306,
-    },
-    migrations: {
-      tableName: "knex_migrations",
-      directory: path.resolve(__dirname, "migrations"),
-      extension: "ts",
-    },
-  },
-
-  production: {
-    client: "mysql2", 
-    connection: {
-      host: "localhost",
-      user: "production_user", 
-      password: "production_password", 
-      database: "production_db", 
-      port: 3306,
-    },
-    migrations: {
-      tableName: "knex_migrations",
-      directory: path.resolve(__dirname, "migrations"),
-      extension: "ts",
-    },
-  },
 };
 export default config;
-export const db = knex(config[process.env.NODE_ENV || "development"]);
+export const db = knex(config["development"]);
